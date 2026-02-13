@@ -1,0 +1,99 @@
+#icons {
+    position: absolute;
+    bottom: 50px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 25px;
+    padding: 15px 28px;
+    background: rgba(24,24,27,.6);
+    border-radius: 20px;
+    backdrop-filter: blur(10px);
+    z-index: 20;
+}
+
+#icons img {
+    cursor: pointer;
+    border-radius: 12px;
+    transition: .2s;
+    opacity: .85;
+}
+
+#icons img:hover {
+    transform: translateY(-4px) scale(1.08);
+    opacity: 1;
+}
+
+#settingsMenu {
+    display: none;
+    position: absolute;
+    bottom: 130px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 240px;
+    background: rgba(24,24,27,.95);
+    padding: 18px;
+    border-radius: 15px;
+    z-index: 100;
+}
+
+#settingsMenu.active {
+    display: flex;
+    justify-content: space-between;
+}
+
+
+.setting-item { 
+    display:flex; 
+    justify-content:space-between; 
+    align-items:center; 
+    font-size:18px; 
+}
+
+
+.switch {
+     position:relative; 
+     display:inline-block; 
+     width:40px; 
+     height:20px; 
+    }
+
+
+.switch input { 
+    opacity:0; 
+    width:0; 
+    height:0; 
+}
+
+.slider { position:absolute;
+        cursor:pointer;
+        top:0; 
+        left:0;
+        right:0; 
+        bottom:0; 
+        background-color:#3f3f46; 
+        transition:.4s;
+        border-radius:34px;
+    }
+
+
+.slider:before { 
+        position:absolute; 
+        content:"";
+        height:16px;
+        width:16px; 
+        left:2px;
+        bottom:2px;
+        background:white;
+        transition:.4s;
+        border-radius:50%; 
+}
+
+input:checked + .slider { 
+    background:white; 
+}
+
+input:checked + .slider:before { 
+    transform:translateX(20px); 
+    background:black; 
+}

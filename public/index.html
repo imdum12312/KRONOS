@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clever | Log in</title>
+
+<link rel="icon" type="image/x-icon" href="https://assets.clever.com/launchpad/c64d85202/favicon.ico">
+<script src="https://cdn.tailwindcss.com"></script>
+<script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<link href="src/css/body.css" rel="stylesheet" type="text/css" />
+<link href="src/css/frame.css" rel="stylesheet" type="text/css" />
+<link href="src/css/search.css" rel="stylesheet" type="text/css" />
+<link href="src/css/nav.css" rel="stylesheet" type="text/css" />
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-2TWLXPZG92"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-2TWLXPZG92');
+</script>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Rationale&family=Special+Gothic+Expanded+One&display=swap');
+</style>
+</head>
+
+<body>
+<div id="root"></div>
+
+<div id="homePage">
+    <h1 class="main">KRONOS</h1>
+    <div class="search-bar">
+        <svg width="24" height="24" fill="none" stroke="white" stroke-width="2">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.6" y2="16.6"></line>
+        </svg>
+        <input id="searchHome" class="search-input" placeholder="Search the web...">
+    </div>
+</div>
+
+<div id="tabs">
+    <button id="back">←</button>
+    <button id="forward">→</button>
+    <button id="refresh">↻</button>
+    <input id="searchToolbar" placeholder="Search or enter URL">
+    <button id="full">⛶</button>
+</div>
+
+<div class="loader" id="loader"></div>
+<iframe id="frame"></iframe>
+
+<div id="settingsMenu">
+    <div class="setting-item">
+        <span>Snow & Stars</span>
+        <label class="switch">
+            <input type="checkbox" id="snowToggle" checked>
+            <span class="slider"></span>
+        </label>
+    </div>
+</div>
+
+<div id="icons">
+    <img src="src/imgs/home.png" width="50" onclick="window.location.href='index.html'">
+    <img src="src/imgs/games.png" width="50" onclick="window.location.href='games.html'">
+    <img src="src/imgs/settings.png" width="50" id="btnSettings">
+    <img src="src/imgs/cord.png" width="45" id="discordBtn">
+</div>
+
+
+
+<script type="module" src="./src/js/scipt.js"></script>
+
+
+<script type="text/babel" src="./src/js/babble.js"></script>
+</body>
+</html>

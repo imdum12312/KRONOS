@@ -1,0 +1,35 @@
+* { box-sizing: border-box }
+
+body {
+    margin: 0;
+    background: #000;
+    color: #fff;
+    font-family: 'Rationale', sans-serif;
+    overflow: hidden;
+}
+
+#root {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    transition: opacity .4s;
+}
+
+#homePage {
+    position: absolute;
+    top: 45%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 18px;
+    z-index: 10;
+}
+
+.main {
+    font-family: 'Special Gothic Expanded One', sans-serif;
+    font-size: 78px;
+    letter-spacing: 4px;
+    text-shadow: 0 0 25px rgba(255,255,255,.2);
+}

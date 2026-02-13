@@ -1,0 +1,72 @@
+.game-item {
+     padding:1rem; 
+     background:rgba(34,34,34,0.7); 
+     border-radius:12px; 
+     text-align:center; 
+     cursor:pointer; 
+     transition:.2s; 
+     border:1px solid #444; 
+    }
+
+
+.game-item:hover {
+     transform:translateY(-4px); 
+     box-shadow:0 0 20px rgba(255,255,255,.4); 
+    }
+
+
+.game-item button { 
+    background:transparent; 
+    border:none; 
+    color:white; 
+    font-weight:bold;
+    font-size:1rem; cursor:pointer; width:100%; 
+}
+
+
+.game-modal {
+    position:fixed; 
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
+    width:90%; height:90%;
+    background:rgba(0,0,0,.85); 
+    backdrop-filter:blur(12px); 
+    border-radius:20px; 
+    z-index:150; display:none; 
+    flex-direction:column; 
+}
+
+
+.modal-top { 
+    display:flex; 
+    justify-content:space-between; 
+    align-items:center; 
+    padding:1rem; 
+    background:rgba(0,0,0,.4); 
+    border-radius:20px 20px 0 0; }
+
+
+.modal-title { 
+    font-size:1.2rem; 
+}
+
+
+.modal-btns { 
+    display:flex;
+    gap:1rem;
+    }
+
+
+.modal-btn { 
+    padding:.4rem 1rem; 
+    border-radius:10px; 
+    background:white; 
+    color:black; 
+    font-weight:bold; 
+    border:none; 
+    cursor:pointer; 
+}
+
+
+@keyframes rotation { 0% { transform:translate(-50%,-50%) rotate(0deg); } 100% { transform:translate(-50%,-50%) rotate(360deg); } }

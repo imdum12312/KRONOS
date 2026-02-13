@@ -1,0 +1,31 @@
+.search-bar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 400px;
+    max-width: 90%;
+    background: rgba(255,255,255,.1);
+    padding: 10px 14px;
+    border-radius: 12px;
+}
+
+.search-bar.hidden { 
+    display: none 
+}
+
+.search-input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: #fff;
+    font-size: 18px;
+}
+
+.search-input::placeholder { 
+    color:rgba(255,255,255,0.6);
+ }
+
+.search-icon { 
+    flex-shrink:0; 
+}
