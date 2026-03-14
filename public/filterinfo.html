@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Student Privacy Info</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+[data-theme="dark"] {
+  --bg: #080808;
+  --bg2: #0f0f0f;
+  --bg3: #161616;
+  --border: #1e1e1e;
+  --text: #e8e4dc;
+  --muted: #666;
+  --subtle: #2a2a2a;
+  --accent: #e8e4dc;
+  --accent-inv: #080808;
+  --card-bg: #0d0d0d;
+  --hover-bg: #141414;
+  --yellow: rgba(232,200,74,0.09);
+  --yellow-border: rgba(232,200,74,0.22);
+  --yellow-text: #e8c84a;
+}
+[data-theme="light"] {
+  --bg: #f4f1ec;
+  --bg2: #ece9e2;
+  --bg3: #e4e0d8;
+  --border: #d4d0c8;
+  --text: #141414;
+  --muted: #888;
+  --subtle: #ccc;
+  --accent: #141414;
+  --accent-inv: #f4f1ec;
+  --card-bg: #edeae3;
+  --hover-bg: #e6e3db;
+  --yellow: rgba(160,120,0,0.07);
+  --yellow-border: rgba(160,120,0,0.2);
+  --yellow-text: #7a5c00;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Syne', sans-serif;
+  font-weight: 400;
+  transition: background 0.4s, color 0.4s;
+  min-height: 100vh;
+  cursor: none;
+}
+.cursor {
+  position: fixed;
+  width: 10px; height: 10px;
+  background: var(--text);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-50%,-50%);
+  transition: width 0.2s, height 0.2s, background 0.4s;
+}
+.cursor-ring {
+  position: fixed;
+  width: 36px; height: 36px;
+  border: 1px solid var(--text);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9998;
+  transform: translate(-50%,-50%);
+  opacity: 0.3;
+  transition: width 0.25s, height 0.25s, border-color 0.4s;
+}
+body.hov .cursor { width: 16px; height: 16px; }
+body.hov .cursor-ring { width: 52px; height: 52px; opacity: 0.15; }
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 48px;
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+  transition: background 0.4s, border-color 0.4s;
+}
+.nav-logo {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.82rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text);
+  text-decoration: none;
+  transition: color 0.4s;
+}
+.nav-right { display: flex; align-items: center; gap: 28px; }
+.nav-link {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.2em;
+  color: var(--muted);
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: color 0.2s;
+}
+.nav-link:hover { color: var(--text); }
+.theme-toggle {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  padding: 6px 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: none;
+  transition: background 0.4s, border-color 0.4s;
+}
+.theme-toggle span {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.15em;
+  color: var(--muted);
+  text-transform: uppercase;
+  user-select: none;
+  transition: color 0.4s;
+}
+.toggle-dot {
+  width: 7px; height: 7px;
+  background: var(--text);
+  border-radius: 50%;
+  transition: background 0.4s;
+}
+.toc-bar {
+  position: sticky;
+  top: 61px;
+  z-index: 100;
+  background: var(--bg2);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  overflow-x: auto;
+  scrollbar-width: none;
+  transition: background 0.4s, border-color 0.4s;
+}
+.toc-bar::-webkit-scrollbar { display: none; }
+.toc-item {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted);
+  padding: 13px 22px;
+  white-space: nowrap;
+  text-decoration: none;
+  border-right: 1px solid var(--border);
+  transition: color 0.2s, background 0.2s, border-color 0.4s;
+  cursor: none;
+}
+.toc-item:hover { color: var(--text); background: var(--hover-bg); }
+.toc-item.active { color: var(--text); }
+header {
+  padding: 148px 48px 84px;
+  max-width: 960px;
+  margin: 0 auto;
+  position: relative;
+  overflow: hidden;
+}
+.watermark {
+  position: absolute;
+  top: 50%;
+  right: -30px;
+  transform: translateY(-50%) rotate(-8deg);
+  font-family: 'DM Serif Display', serif;
+  font-size: 9rem;
+  color: var(--border);
+  pointer-events: none;
+  white-space: nowrap;
+  letter-spacing: -0.04em;
+  transition: color 0.4s;
+}
+.eyebrow {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.3em;
+  color: var(--muted);
+  text-transform: uppercase;
+  margin-bottom: 22px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: color 0.4s;
+}
+.eyebrow::before {
+  content: '';
+  display: block;
+  width: 24px;
+  height: 1px;
+  background: var(--muted);
+  transition: background 0.4s;
+}
+h1 {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(2.8rem, 6.5vw, 5.2rem);
+  font-weight: 400;
+  line-height: 1.06;
+  letter-spacing: -0.02em;
+  color: var(--text);
+  margin-bottom: 26px;
+  transition: color 0.4s;
+}
+h1 em { font-style: italic; color: var(--muted); transition: color 0.4s; }
+.hero-sub {
+  font-size: 1.05rem;
+  color: var(--muted);
+  max-width: 500px;
+  line-height: 1.75;
+  transition: color 0.4s;
+}
+main {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0 48px 120px;
+}
+section {
+  padding: 72px 0;
+  border-bottom: 1px solid var(--border);
+  opacity: 0;
+  transform: translateY(16px);
+  animation: rise 0.6s ease forwards;
+  transition: border-color 0.4s;
+}
+section:nth-child(1)  { animation-delay: 0.05s; }
+section:nth-child(2)  { animation-delay: 0.12s; }
+section:nth-child(3)  { animation-delay: 0.19s; }
+section:nth-child(4)  { animation-delay: 0.26s; }
+section:nth-child(5)  { animation-delay: 0.33s; }
+section:nth-child(6)  { animation-delay: 0.40s; }
+section:nth-child(7)  { animation-delay: 0.47s; }
+section:nth-child(8)  { animation-delay: 0.54s; }
+section:nth-child(9)  { animation-delay: 0.61s; }
+@keyframes rise { to { opacity: 1; transform: translateY(0); } }
+.section-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.3em;
+  color: var(--muted);
+  text-transform: uppercase;
+  margin-bottom: 18px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: color 0.4s;
+}
+.section-label::after {
+  content: '';
+  flex: 1;
+  max-width: 56px;
+  height: 1px;
+  background: var(--border);
+  transition: background 0.4s;
+}
+h2 {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(1.6rem, 3.2vw, 2.2rem);
+  font-weight: 400;
+  line-height: 1.2;
+  color: var(--text);
+  margin-bottom: 20px;
+  transition: color 0.4s;
+}
+h2 em { font-style: italic; color: var(--muted); transition: color 0.4s; }
+p {
+  font-size: 1rem;
+  line-height: 1.82;
+  color: var(--muted);
+  margin-bottom: 16px;
+  max-width: 660px;
+  transition: color 0.4s;
+}
+p strong { color: var(--text); font-weight: 700; transition: color 0.4s; }
+.two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  background: var(--border);
+  border: 1px solid var(--border);
+  margin: 28px 0;
+  transition: background 0.4s, border-color 0.4s;
+}
+.two-col .col {
+  background: var(--card-bg);
+  padding: 26px 24px;
+  transition: background 0.2s;
+}
+.two-col .col:hover { background: var(--hover-bg); }
+.two-col .col+.col { border-left: 1px solid var(--border); transition: border-color 0.4s; }
+.col-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.25em;
+  color: var(--muted);
+  text-transform: uppercase;
+  margin-bottom: 10px;
+  transition: color 0.4s;
+}
+.col p { font-size: 0.9rem; margin: 0; max-width: none; }
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  margin: 28px 0;
+  transition: background 0.4s, border-color 0.4s;
+}
+.card {
+  background: var(--card-bg);
+  padding: 24px 20px;
+  transition: background 0.2s;
+}
+.card:hover { background: var(--hover-bg); }
+.card-icon { font-size: 1.25rem; margin-bottom: 10px; }
+.card h3 {
+  font-family: 'Syne', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text);
+  margin-bottom: 8px;
+  transition: color 0.4s;
+}
+.card p { font-size: 0.86rem; line-height: 1.65; margin: 0; max-width: none; }
+.stat-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  margin: 28px 0;
+  transition: background 0.4s, border-color 0.4s;
+}
+.stat-card {
+  background: var(--card-bg);
+  padding: 24px 20px;
+  border-top: 2px solid var(--text);
+  transition: background 0.2s, border-color 0.4s;
+}
+.stat-card:hover { background: var(--hover-bg); }
+.stat-number {
+  font-family: 'DM Serif Display', serif;
+  font-size: 2.5rem;
+  color: var(--text);
+  line-height: 1;
+  transition: color 0.4s;
+}
+.stat-desc {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.66rem;
+  color: var(--muted);
+  margin-top: 8px;
+  letter-spacing: 0.04em;
+  line-height: 1.55;
+  transition: color 0.4s;
+}
+.pullquote {
+  border-left: 2px solid var(--text);
+  padding: 18px 26px;
+  margin: 28px 0;
+  background: var(--bg2);
+  transition: border-color 0.4s, background 0.4s;
+}
+.pullquote p {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.18rem;
+  font-style: italic;
+  line-height: 1.55;
+  color: var(--text);
+  margin: 0;
+  max-width: 100%;
+  transition: color 0.4s;
+}
+.pullquote cite {
+  display: block;
+  margin-top: 10px;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.63rem;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+  font-style: normal;
+  transition: color 0.4s;
+}
+.cite-box {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  padding: 18px 20px;
+  margin: 18px 0;
+  position: relative;
+  transition: background 0.4s, border-color 0.4s;
+}
+.cite-box::before {
+  content: attr(data-label);
+  position: absolute;
+  top: -9px; left: 14px;
+  background: var(--bg2);
+  padding: 0 8px;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.2em;
+  color: var(--yellow-text);
+  text-transform: uppercase;
+  transition: background 0.4s, color 0.4s;
+}
+.cite-box p { font-size: 0.88rem; color: var(--muted); margin: 0; line-height: 1.7; max-width: 100%; }
+.cite-box a {
+  display: block;
+  margin-top: 8px;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.63rem;
+  color: var(--yellow-text);
+  text-decoration: none;
+  word-break: break-all;
+  transition: color 0.4s;
+}
+.cite-box a:hover { text-decoration: underline; }
+.legal-box {
+  background: var(--yellow);
+  border: 1px solid var(--yellow-border);
+  padding: 24px 26px;
+  margin: 24px 0;
+  transition: background 0.4s, border-color 0.4s;
+}
+.legal-box h3 {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  color: var(--yellow-text);
+  text-transform: uppercase;
+  margin-bottom: 10px;
+  transition: color 0.4s;
+}
+.legal-box p { font-size: 0.95rem; color: var(--text); max-width: 100%; transition: color 0.4s; }
+.list-clean {
+  list-style: none;
+  margin: 18px 0;
+  max-width: 660px;
+}
+.list-clean li {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 13px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.95rem;
+  color: var(--muted);
+  line-height: 1.65;
+  transition: border-color 0.4s, color 0.2s;
+}
+.list-clean li:first-child { border-top: 1px solid var(--border); transition: border-color 0.4s; }
+.list-clean li:hover { color: var(--text); }
+.list-clean li::before {
+  content: '→';
+  font-family: 'DM Mono', monospace;
+  font-size: 0.78rem;
+  color: var(--subtle);
+  flex-shrink: 0;
+  margin-top: 3px;
+  transition: color 0.2s;
+}
+.list-clean li:hover::before { color: var(--text); }
+.action-box {
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  padding: 24px;
+  margin: 24px 0;
+  transition: background 0.4s, border-color 0.4s;
+}
+.action-box ol { list-style: none; counter-reset: steps; }
+.action-box ol li {
+  counter-increment: steps;
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  padding: 13px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.95rem;
+  color: var(--muted);
+  line-height: 1.65;
+  transition: border-color 0.4s, color 0.2s;
+}
+.action-box ol li:last-child { border-bottom: none; }
+.action-box ol li:hover { color: var(--text); }
+.action-box ol li::before {
+  content: counter(steps, decimal-leading-zero);
+  font-family: 'DM Mono', monospace;
+  font-size: 0.7rem;
+  color: var(--subtle);
+  flex-shrink: 0;
+  margin-top: 3px;
+  letter-spacing: 0.05em;
+  transition: color 0.4s;
+}
+.action-box ol li strong { color: var(--text); font-weight: 700; transition: color 0.4s; }
+.closing-block { border-bottom: none; text-align: center; }
+.closing-block h2 {
+  font-size: clamp(2rem, 5vw, 3.6rem);
+  font-style: italic;
+  line-height: 1.1;
+  margin-bottom: 20px;
+}
+.closing-block p { max-width: 480px; margin: 0 auto 12px; text-align: center; }
+.blink-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 40px;
+}
+.blink-dot {
+  width: 5px; height: 5px;
+  background: var(--muted);
+  border-radius: 50%;
+  animation: blink 1.8s ease infinite;
+  transition: background 0.4s;
+}
+.blink-dot:nth-child(2) { animation-delay: 0.4s; }
+.blink-dot:nth-child(3) { animation-delay: 0.8s; }
+@keyframes blink { 0%,100%{opacity:1}50%{opacity:0.15} }
+.blink-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.25em;
+  color: var(--muted);
+  text-transform: uppercase;
+  transition: color 0.4s;
+}
+footer {
+  border-top: 1px solid var(--border);
+  padding: 36px 48px;
+  max-width: 960px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  transition: border-color 0.4s;
+}
+footer p {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.63rem;
+  letter-spacing: 0.12em;
+  color: var(--muted);
+  margin: 0;
+  max-width: none;
+  transition: color 0.4s;
+}
+.back-btn {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.66rem;
+  letter-spacing: 0.15em;
+  color: var(--muted);
+  text-decoration: none;
+  text-transform: uppercase;
+  border: 1px solid var(--border);
+  padding: 8px 18px;
+  cursor: none;
+  transition: color 0.2s, background 0.2s, border-color 0.2s;
+}
+.back-btn:hover { color: var(--accent-inv); background: var(--accent); border-color: var(--accent); }
+@media (max-width: 680px) {
+  nav { padding: 16px 20px; }
+  header { padding: 120px 20px 56px; }
+  main { padding: 0 20px 80px; }
+  footer { padding: 28px 20px; }
+  .two-col { grid-template-columns: 1fr; }
+  .two-col .col+.col { border-left: none; border-top: 1px solid var(--border); }
+  .nav-link { display: none; }
+  .watermark { display: none; }
+}
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<nav>
+  <a href="https://kronos.onl" class="nav-logo">Kronos</a>
+  <div class="nav-right">
+    <a href="https://kronos.onl" class="nav-link">Home</a>
+    <div class="theme-toggle" id="themeToggle">
+      <div class="toggle-dot"></div>
+      <span id="themeLabel">Dark</span>
+    </div>
+  </div>
+</nav>
+
+<div class="toc-bar">
+  <a href="#basics" class="toc-item">The Basics</a>
+  <a href="#school" class="toc-item">School Filters</a>
+  <a href="#limits" class="toc-item">Real Limits</a>
+  <a href="#surveillance" class="toc-item">What Schools Use</a>
+  <a href="#scale" class="toc-item">The Scale</a>
+  <a href="#fourth" class="toc-item">Your Rights</a>
+  <a href="#legal" class="toc-item">Legal Action</a>
+  <a href="#closing" class="toc-item">Bottom Line</a>
+</div>
+
+<header>
+  <div class="watermark">Kronos</div>
+  <div class="eyebrow">Filter Info · Student Rights · Surveillance</div>
+  <h1>Is using a proxy<br><em>actually illegal?</em><br>And what are they<br><em>doing to your data?</em></h1>
+  <p class="hero-sub">Two real questions. Honest answers. No legal jargon, no scare tactics — just what you actually need to know.</p>
+</header>
+
+<main>
+
+  <section id="basics">
+    <div class="section-label">The basics</div>
+    <h2>No. Using a proxy is not illegal.</h2>
+    <p>A proxy routes your internet traffic through another server before it reaches its destination. That's genuinely all it does. There's nothing inherently wrong with that — corporations, journalists, privacy researchers, and everyday people use them all the time.</p>
+    <p><strong>In the United States, using a proxy is completely legal.</strong> No federal law makes it a crime. No state law makes it a crime. The technology itself is neutral. Kronos is a proxy. Kronos is legal.</p>
+    <div class="two-col">
+      <div class="col">
+        <div class="col-label">Legal</div>
+        <p>Using a proxy to browse the web, access blocked content, or protect your privacy. All of it. Legal.</p>
+      </div>
+      <div class="col">
+        <div class="col-label">Not legal</div>
+        <p>Using a proxy while doing something already illegal — fraud, hacking, harassment. The proxy doesn't make the underlying crime disappear.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="school">
+    <div class="section-label">School filters</div>
+    <h2>School filters are a policy issue,<br>not a legal one.</h2>
+    <p>If you're using Kronos to get around your school's filters, it helps to understand what's actually at stake. Your school almost certainly has an <strong>Acceptable Use Policy (AUP)</strong> — a document you agreed to when you got your school account. That document probably says you can't bypass filters.</p>
+    <p>Violating your AUP is a <strong>school discipline issue</strong>, not a criminal one. The worst realistic outcome is losing device privileges or getting a write-up — not an arrest, not a lawsuit, not a criminal record.</p>
+    <div class="pullquote">
+      <p>"The school's filter is a rule, not a law. Breaking a rule has consequences. Breaking a law does too. They are not the same thing."</p>
+    </div>
+    <p>Schools are legally required under the <strong>Children's Internet Protection Act (CIPA)</strong> to filter harmful content — things like explicit material. That obligation is on the school, not you. CIPA doesn't make it illegal for students to use proxies. It just means schools have to try to block them.</p>
+  </section>
+
+  <section id="limits">
+    <div class="section-label">Where the line actually is</div>
+    <h2>There are a few real limits worth knowing about.</h2>
+    <div class="cards">
+      <div class="card">
+        <div class="card-icon">🔒</div>
+        <h3>Crimes through a proxy</h3>
+        <p>If you use a proxy to do something actually illegal, the proxy doesn't protect you. The underlying act is still the problem.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">📄</div>
+        <h3>Terms of service</h3>
+        <p>Some sites ban proxy access in their terms. Violating those can get your account banned, but it's generally not a legal issue unless money or deception is involved.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">🏫</div>
+        <h3>Your school's AUP</h3>
+        <p>This is the main real-world thing to think about. It's a real agreement with real school-level consequences. Know what it says.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">🌍</div>
+        <h3>Other countries</h3>
+        <p>Laws vary globally. In some countries proxy use is restricted or illegal. In the U.S., you're fine.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="surveillance">
+    <div class="section-label">What schools actually use</div>
+    <h2>The monitoring software on your device goes further than you probably realize.</h2>
+    <p>Tools like <strong>Lightspeed</strong> and <strong>GoGuardian</strong> do a lot more than block websites. They can record your screen in real time, log browsing history, access open tabs, chat directly with individual students, and in many cases monitor activity on <strong>personal devices</strong> — not just school-issued ones.</p>
+    <p>Lightspeed, which has been replacing GoGuardian across school districts since 2024, expanded that reach dramatically. GoGuardian couldn't see your personal laptop. Lightspeed can.</p>
+    <div class="pullquote">
+      <p>"I feel that my privacy is being violated because it's my personal computer and I use the actual Chromebooks for my assessments."</p>
+      <cite>— Student, Montgomery County Public Schools, quoted in The Wootton Common Sense (2024)</cite>
+    </div>
+    <p>The <strong>Electronic Frontier Foundation</strong> filed dozens of public records requests and analyzed tens of thousands of GoGuardian flagging events. Students were flagged for visiting the text of Genesis on Bible.com, for reading Romeo and Juliet, for looking up civil rights history, and for accessing a Texas state legislature page about cannabis legislation.</p>
+    <div class="cite-box" data-label="Source — EFF">
+      <p>"By design, GoGuardian is a red flag machine — its false positives heavily outweigh its ability to accurately determine whether the content of a site is harmful."</p>
+      <a href="https://www.eff.org/deeplinks/2023/10/how-goguardian-invades-student-privacy" target="_blank">eff.org — How GoGuardian Invades Student Privacy (2023)</a>
+    </div>
+    <p>Gaggle — another competing platform — has been documented scanning student emails, chat messages, classroom assignments, journal entries, and even fictional stories. Not just during school hours. On weekends. Holidays. After midnight. Over summer break.</p>
+    <p>In some cases, this software has accessed student webcam footage while students were at home. In others, it has outed LGBTQ+ students to their families by flagging and disclosing private searches to administrators without the student's knowledge.</p>
+  </section>
+
+  <section id="scale">
+    <div class="section-label">The scale of it</div>
+    <h2>This is not a small or isolated problem.</h2>
+    <div class="stat-row">
+      <div class="stat-card">
+        <div class="stat-number">~50%</div>
+        <div class="stat-desc">of all K–12 students in the U.S. subject to digital surveillance tools, per a New York Times report</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">27M+</div>
+        <div class="stat-desc">students monitored by GoGuardian alone, across 10,000+ schools nationwide</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">$230K</div>
+        <div class="stat-desc">spent annually on GoGuardian by one Maryland county before they switched to Lightspeed</div>
+      </div>
+    </div>
+    <div class="cite-box" data-label="Source — U.S. Senate">
+      <p>Senators Elizabeth Warren and Ed Markey, after a Congressional investigation into GoGuardian, Gaggle, Bark, and Securly: these tools "may instead be surveilling students inappropriately, compounding racial disparities in school discipline and draining resources from more effective student supports."</p>
+      <a href="https://www.markey.senate.gov/news/press-releases/senators-markey-warren-investigation-finds-that-edtech-student-surveillance-platforms-need-urgent-federal-action-to-protect-students" target="_blank">markey.senate.gov — Senate Investigation Report (2022)</a>
+    </div>
+    <p>Georgetown Law's Center on Privacy and Technology found that school districts are deploying these tools without fully assessing the privacy and civil rights implications. The ACLU's senior policy counsel has stated there is <strong>no proof these technologies even accomplish</strong> the safety goals they're sold on.</p>
+  </section>
+
+  <section id="fourth">
+    <div class="section-label">Your constitutional rights</div>
+    <h2>The Fourth Amendment applies to you. Even at school.</h2>
+    <p>Here's something schools and edtech companies rarely bring up: <strong>students have constitutional rights.</strong> The Fourth Amendment protects against unreasonable searches and seizures — and the Supreme Court has confirmed it applies inside school walls.</p>
+    <div class="legal-box">
+      <h3>U.S. Constitution — Fourth Amendment</h3>
+      <p>"The right of the people to be secure in their persons, houses, papers, and effects, against unreasonable searches and seizures, shall not be violated..."</p>
+    </div>
+    <p>In <strong><em>New Jersey v. T.L.O.</em>, 469 U.S. 325 (1985)</strong>, the Supreme Court ruled unanimously that the Fourth Amendment applies to searches by public school officials. The Court explicitly stated that public school administrators act as agents of the state — meaning they're bound by the same constitutional limits as law enforcement.</p>
+    <div class="cite-box" data-label="Legal Precedent — SCOTUS 1985">
+      <p><em>New Jersey v. T.L.O.</em>: The Court held that "schoolchildren have legitimate expectations of privacy" and that school searches must be (1) justified at their start by reasonable suspicion, and (2) limited in scope to the circumstances that justified them. Blanket, continuous, suspicion-less monitoring of every student's every keystroke was not what that standard contemplated.</p>
+      <a href="https://supreme.justia.com/cases/federal/us/469/325/" target="_blank">supreme.justia.com — New Jersey v. T.L.O., 469 U.S. 325</a>
+    </div>
+    <p>The standard the Court set was <em>reasonable suspicion</em> — individualized, targeted, specific. What Lightspeed and GoGuardian do is the opposite: continuous, untargeted surveillance of millions of students, including in their own homes, with no suspicion required at all.</p>
+    <ul class="list-clean">
+      <li>Students have a "legitimate expectation of privacy" — direct language from the Supreme Court</li>
+      <li>Public school officials are state actors — they're bound by the Constitution</li>
+      <li>Monitoring students on personal devices at home sits in a serious legal gray zone</li>
+      <li>FERPA gives you the right to access records your school keeps on you</li>
+      <li>Washington Law Review (2024) found these tools disproportionately harm LGBTQ+ students, students of color, and students with disabilities</li>
+    </ul>
+  </section>
+
+  <section id="legal">
+    <div class="section-label">Legal action</div>
+    <h2>Courts and Congress are starting to pay attention.</h2>
+    <p>In 2025, the <strong>Knight First Amendment Institute at Columbia University</strong> filed a federal lawsuit targeting how school districts use surveillance software on student laptops — seeking transparency about what data is collected, how long it's kept, and who can access it. Because right now, none of that information is publicly available.</p>
+    <div class="cite-box" data-label="Source — Knight Institute">
+      <p>"The transparency needed to answer [these questions] does not exist, which is why the Knight First Amendment Institute has filed a lawsuit seeking information about how one school district uses surveillance systems to monitor student laptops."</p>
+      <a href="https://knightcolumbia.org/blog/school-surveillance-systems-threaten-student-privacy-new-knight-institute-lawsuit-alleges" target="_blank">knightcolumbia.org — Knight Institute Lawsuit (2025)</a>
+    </div>
+    <p>Journalism students at a high school in Lawrence, Kansas successfully lobbied to have their files exempted from Gaggle's surveillance entirely — arguing that monitoring their reporting would create a chilling effect on their First Amendment right to cover school administration. It worked.</p>
+    <p>Students are pushing back on this. And it's working. Here's what you can do too.</p>
+    <div class="action-box">
+      <ol>
+        <li><strong>Demand transparency.</strong> Ask your district what data is collected, how long it's stored, who can see it, and whether it's ever shared with law enforcement.</li>
+        <li><strong>Know your FERPA rights.</strong> The Family Educational Rights and Privacy Act gives students and parents the right to inspect educational records. Surveillance logs may qualify.</li>
+        <li><strong>Organize.</strong> Like the Kansas journalism students did. School boards respond to people who actually show up. Collective action works.</li>
+        <li><strong>Support state legislation.</strong> Several states have introduced bills limiting or banning school surveillance software. Contact your state representative.</li>
+        <li><strong>Cite the case.</strong> <em>New Jersey v. T.L.O.</em>, 469 U.S. 325 (1985). You have a legitimate expectation of privacy. That's not an opinion — it's Supreme Court precedent.</li>
+      </ol>
+    </div>
+  </section>
+
+  <section id="closing" class="closing-block">
+    <div class="section-label">The bottom line</div>
+    <h2>Using a proxy isn't illegal.<br>But you deserve to know<br><em>what's watching you.</em></h2>
+    <p>Kronos exists because we think access to information shouldn't be arbitrarily blocked. A lot of what school filters catch is completely harmless — and they regularly block content that's actually useful, important, or just totally innocent.</p>
+    <p>We'd rather you make an informed choice than use any tool blindly. Know your school's AUP. Know what software is running on your devices. Know that you have constitutional rights — even as a student.</p>
+    <p>You're smart enough to be here. You're smart enough to navigate this.</p>
+    <div class="blink-row">
+      <div class="blink-dot"></div>
+      <span class="blink-label">Documented · Sourced · Constitutional</span>
+      <div class="blink-dot"></div>
+      <div class="blink-dot"></div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <p>Kronos · filterinfo.html · Not legal advice — just real information.</p>
+  <a href="https://kronos.onl" class="back-btn">← Back to Kronos</a>
+</footer>
+
+<script>
+const cursor = document.getElementById('cursor');
+const ring = document.getElementById('cursorRing');
+const toggle = document.getElementById('themeToggle');
+const label = document.getElementById('themeLabel');
+const html = document.documentElement;
+
+let mx = 0, my = 0, rx = 0, ry = 0;
+
+document.addEventListener('mousemove', e => {
+  mx = e.clientX; my = e.clientY;
+  cursor.style.left = mx + 'px';
+  cursor.style.top = my + 'px';
+});
+
+(function loop() {
+  rx += (mx - rx) * 0.12;
+  ry += (my - ry) * 0.12;
+  ring.style.left = rx + 'px';
+  ring.style.top = ry + 'px';
+  requestAnimationFrame(loop);
+})();
+
+document.querySelectorAll('a, .card, .stat-card, .col, .action-box li, .list-clean li, .theme-toggle, .back-btn').forEach(el => {
+  el.addEventListener('mouseenter', () => document.body.classList.add('hov'));
+  el.addEventListener('mouseleave', () => document.body.classList.remove('hov'));
+});
+
+toggle.addEventListener('click', () => {
+  const dark = html.getAttribute('data-theme') === 'dark';
+  html.setAttribute('data-theme', dark ? 'light' : 'dark');
+  label.textContent = dark ? 'Light' : 'Dark';
+});
+
+const tocItems = document.querySelectorAll('.toc-item');
+const sections = document.querySelectorAll('section[id]');
+
+new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      tocItems.forEach(t => t.classList.remove('active'));
+      const a = document.querySelector(`.toc-item[href="#${e.target.id}"]`);
+      if (a) a.classList.add('active');
+    }
+  });
+}, { threshold: 0.3 }).observe && sections.forEach(s =>
+  new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        tocItems.forEach(t => t.classList.remove('active'));
+        const a = document.querySelector(`.toc-item[href="#${e.target.id}"]`);
+        if (a) a.classList.add('active');
+      }
+    });
+  }, { threshold: 0.3 }).observe(s)
+);
+</script>
+
+</body>
+</html>
